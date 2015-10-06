@@ -1,3 +1,27 @@
+<?php
+
+// define variables and set to empty values
+$nameErr = $emailErr = $genderErr = $websiteErr = "";
+$email = "";
+
+if (empty($_POST["email"])) {
+     $emailErr = "Email is required";
+   } else {
+     $email = test_input($_POST["email"]);
+     // check if e-mail address is well-formed
+     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+       $emailErr = "Invalid email format"; 
+     }
+     }
+     function test_input($data) {
+   $data = trim($data);
+   $data = stripslashes($data);
+   $data = htmlspecialchars($data);
+   return $data;
+}
+
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -8,7 +32,7 @@
 <body>
 <table width="704" height="485" border="1" align="center">
 <tr>
-  <td width="441"><form action="send.php" method="post" enctype="multipart/form-data" name="form1">
+  <td width="441"><form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" enctype="multipart/form-data" name="form1">
     <table width="704" height="485" border="1" align="center">
       <tr></tr>
       <tr>
@@ -51,7 +75,9 @@
             <tr>
               <td>Email Address</td>
               <td colspan="2"><label for="textfield3"></label>
-                <input type="text" name="email" id="textfield3" /></td>
+                <input type="text" name="email" id="textfield3" />
+                 <span class="error">* <?php echo $emailErr;?></span>
+                 </td>
               </tr>
             <tr>
               <td>Occupation</td>
@@ -83,5 +109,11 @@
   </form></td>
 </tr>
 </table>
+<?php
+echo "<h2>Your Input:</h2>";
+echo "<br>";
+echo $email;
+
+?>
 </body>
 </html>
